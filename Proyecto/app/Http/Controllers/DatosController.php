@@ -45,18 +45,18 @@ class DatosController extends Controller
         $dato->password = $request->password;
 
         $dato->save();
-        // return response()->json([
-        //     "status" => true,
-        //     "message"=> "done.Se Creo El Usuario", 
-        //     "data"=> $dato
-        // ]);
-        $url = "http://localhost/Proyectos/Nueva%20carpeta/Visualjs/index.html";
-        return redirect()->to($url)->with('succes', response()->json([
-                "status" => true,
-                "message"=> "done.Se Creo El Usuario", 
-                "data"=> $dato
-        ])
-        );
+        return response()->json([
+            "status" => true,
+            "message"=> "done.Se Creo El Usuario", 
+            "data"=> $dato
+        ]);
+        // $url = "http://localhost/Proyectos/Nueva%20carpeta/Visualjs/index.html";
+        // return redirect()->to($url)->with('succes', response()->json([
+        //         "status" => true,
+        //         "message"=> "done.Se Creo El Usuario", 
+        //         "data"=> $dato
+        // ])
+        // );
         
     }
     
