@@ -20,7 +20,7 @@ btnCrear.addEventListener('click', ()=> {
     modalCrearUsuario.show()
     opcion = 'crear'
 })
-
+getUsers()
 const mostrar = (datos) =>{
     datos.forEach(dato =>{
         resultados +=   ` <tr>
@@ -29,8 +29,8 @@ const mostrar = (datos) =>{
                                 <td>${dato.Apellido}</td>
                                 <td>${dato.email}</td>
                                 <td>${dato.password}</td>
-                                <td class="text-center"><a class="btnBorrar btn btn-outline-danger"><i class="bi bi-trash-fill" title="Borrar" class="btn btn-danger"></i></a>
-                                <a class="btnEditar btn btn-outline-warning"><i class="bi bi-arrow-left-right" title="Editar" class="btn btn-warning"></i></a></td>
+                                <td class="text-center"><a class="btnBorrar btn btn-outline-danger bi bi-trash-fill" title="Borrar"></a>
+                                <a class="btnEditar btn btn-outline-warning bi bi-arrow-left-right" title="Editar" ></a></td>
 
                          </tr>
                      `
@@ -43,11 +43,14 @@ const mostrar = (datos) =>{
 
 
 //procedimiento Mostrar
-
-fetch(API_URL)
+console.log(API_URL)
+function getUsers() {
+    fetch(API_URL)
     .then( response => response.json() )
     .then( data => mostrar(data))
     .catch( error => console.log(error))
+
+}
 
 // fetch(`${API_URL}`)
 //     .then((response)=> response.json())
@@ -106,8 +109,11 @@ const on =(element, event, selector, handler) => {
 }
 
 on(document, 'click', '.btnBorrar', e => {
+    window.eventCustom = e
+    console.log(this, e);
     const fila = e.target.parentNode.parentNode
     const id = fila.firstElementChild.innerHTML
+    
 
     alertify.confirm("Seguro que quiere eliminar el usuario.",
     function() {
@@ -115,7 +121,7 @@ on(document, 'click', '.btnBorrar', e => {
             method: 'DELETE'
         })
         .then( res=>res.json())
-        .then( ()=> location.reload())       
+        .then( ()=>{getUsers()})       
     },
     function() {
         alertify.error('cancel')
@@ -129,7 +135,7 @@ let idForm = 0
         const fila = e.target.parentNode.parentNode
         idForm = fila.children[0].innerHTML
         const NombreForm = fila.children[1].innerHTML
-        const ApellidoForm = fila.children[2].innerHTML
+        const ApellidoForm = fila.children[2].innerHTML  
         const emailForm = fila.children[3].innerHTML
         const passwordForm = fila.children[4].innerHTML
 

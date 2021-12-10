@@ -17,6 +17,7 @@ class DatosController extends Controller
     public function index()
     {
         $datos = Datos::all();
+        // return view('index');
         return $datos;
     }
 
@@ -66,9 +67,10 @@ class DatosController extends Controller
      * @param  \App\Models\Datos  $datos
      * @return \Illuminate\Http\Response
      */
-    public function show(Datos $datos)
+    public function show($id)
     {
-     //
+        $datos = Datos::find($id);
+        return response()->json($datos);
     
     }
 

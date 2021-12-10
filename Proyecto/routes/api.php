@@ -22,3 +22,4 @@ Route::get('/datos', 'App\Http\Controllers\DatosController@index');
 Route::post('/datos', 'App\Http\Controllers\DatosController@store');
 Route::put('/datos/{id}', 'App\Http\Controllers\DatosController@update');
 Route::delete('/datos/{id}', 'App\Http\Controllers\DatosController@destroy');
+Route::get('/datos/{id}', 'App\Http\Controllers\DatosController@show');
