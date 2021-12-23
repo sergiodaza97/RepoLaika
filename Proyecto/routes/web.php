@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DatosController;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,8 @@ use App\Http\Controllers\DatosController;
 Route::get('{any}', function(){
     return view('home');
 })->where('any', '.*');
+
+// Route::get('/get_users', function () {
+//     $datos = DB::select('call get_users()'); 
+//    return view('home')->with('datos', $datos);
+//  });

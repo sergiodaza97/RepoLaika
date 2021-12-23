@@ -6,8 +6,9 @@ use App\Http\Requests\Actualizar;
 use App\Http\Requests\Crear;
 use App\Models\Datos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class DatosController extends Controller
+class DatosController extends Controller implements DatosInterface
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +17,7 @@ class DatosController extends Controller
      */
     public function index()
     {
-        $datos = Datos::all();
+        $datos = DB::select('call get_users()'); 
         // return view('index');
         return $datos;
     }
@@ -39,18 +40,22 @@ class DatosController extends Controller
      */
     public function store(Crear $request)
     {
-        $dato = new Datos();
-        $dato->Nombre = $request->Nombre;
-        $dato->Apellido = $request->Apellido;
-        $dato->email = $request->email;
-        $dato->password = $request->password;
+        $values = [$request->Nombre,$request->Apellido,$request->email,$request->password] ;
+        $dato = DB::insert('call post_users(?, ?, ?, ?)',$values);
 
-        $dato->save();
-        return response()->json([
-            "status" => true,
-            "message"=> "done.Se Creo El Usuario", 
-            "data"=> $dato
-        ]);
+        return $dato;
+
+        // $dato->Nombre = $request->Nombre;
+        // $dato->Apellido = $request->Apellido;
+        // $dato->email = $request->email;
+        // $dato->password = $request->password;
+
+        // $dato->save();
+        // return response()->json([
+        //     "status" => true,
+        //     "message"=> "done.Se Creo El Usuario", 
+        //     "data"=> $dato
+        // ]);
         // $url = "http://localhost/Proyectos/Nueva%20carpeta/Visualjs/index.html";
         // return redirect()->to($url)->with('succes', response()->json([
         //         "status" => true,
@@ -94,18 +99,28 @@ class DatosController extends Controller
      */
     public function update(Actualizar $request, Datos $datos)
     {
-        $dato = Datos::findOrFail($request->id);
-            $dato->Nombre = $request->Nombre;
-            $dato->Apellido = $request->Apellido;
-            $dato->email = $request->email;
-            $dato->password = $request->password;
+        $values = [$request->id,$request->Nombre,$request->Apellido,$request->email,$request->password,$request->updated_at] ;
+        $dato = DB::update('call post_users(?, ?, ?, ?, ?, ?)',$values);
 
-            $dato->save();
-            return response()->json([
-                "status" => true,
-                "message"=> "done.Se Actualizo el usuario con id: $request->id", 
-                "data"=> $dato
-            ]);
+        // DB::select("CALL update_product(:id,:Nombre, :Apellido, :email, :password, :now)", [
+        //         "id" => ,
+        //         "description" => "ashiasndf",
+        //         "now" => "2021-12-15 11:11:11"
+        //     ])
+
+        return $dato;
+        // $dato = Datos::findOrFail($request->id);
+        //     $dato->Nombre = $request->Nombre;
+        //     $dato->Apellido = $request->Apellido;
+        //     $dato->email = $request->email;
+        //     $dato->password = $request->password;
+
+        //     $dato->save();
+        //     return response()->json([
+        //         "status" => true,
+        //         "message"=> "done.Se Actualizo el usuario con id: $request->id", 
+        //         "data"=> $dato
+        //     ]);
         // try {
         //     $dato = Datos::findOrFail($request->id);
         //     $dato->Nombre = $request->Nombre;
@@ -131,20 +146,21 @@ class DatosController extends Controller
      * @param  \App\Models\Datos  $datos
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $dato = Datos::destroy($request->id);
-        if ($dato == 0) {
-            return response()->json([
-                "status" => false, 
-                "message"=> "done.No existe el usuario con id: $request->id", 
-                "data"=> $dato
-            ]);
-        }
-        return response()->json([
-            "status" => true, 
-            "message"=> "done.Se Elimino el usuario con id: $request->id", 
-            "data"=> $dato
-        ]);
+        $dato = DB::delete("call delete_users(?)",[$id]);
+        return $dato;
+        // if ($dato == 0) {
+        //     return response()->json([
+        //         "status" => false, 
+        //         "message"=> "done.No existe el usuario con id: $request->id", 
+        //         "data"=> $dato
+        //     ]);
+        // }
+        // return response()->json([
+        //     "status" => true, 
+        //     "message"=> "done.Se Elimino el usuario con id: $request->id", 
+        //     "data"=> $dato
+        // ]);
     }
 }
